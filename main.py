@@ -40,11 +40,11 @@ def create_file(file_path):
     if file_path == 'отмена':
         return run()
     if file_path.endswith('.json'):
-        with open(file_path, 'x', encoding='UTF-8') as file:
+        with open(file_path, 'x', encoding='UTF-8'):
             print(f'{file_path} файл успешно создан')
     else:
         file_path = file_path + '.json'
-        with open(file_path, 'x', encoding='UTF-8') as file:
+        with open(file_path, 'x', encoding='UTF-8'):
             print(f'{file_path} файл успешно создан')
 
 
