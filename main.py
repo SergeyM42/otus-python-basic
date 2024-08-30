@@ -1,8 +1,9 @@
 import os
 import json
-global_result_search = 0
-global_selected_file = ''
-menu_1 = [
+
+GLOBAL_RESULT_SEARCH = 0
+GLOBAL_SELECTED_FILE = ''
+MENU_1 = [
     """
     1. Открыть файл/показать список файлов
     2. Создать файл телефонной книги
@@ -57,7 +58,7 @@ def chk_open_file_menu_selection():
 
 
 def select_file():
-    global global_selected_file
+    global GLOBAL_SELECTED_FILE
     results = search_files_phone_books()
     if not results:
         print('Телефонная книга не обнаружена')
@@ -75,17 +76,17 @@ def select_file():
             num += 1
             print(f'{num}. {dir_1}')
         try:
-            choice1 = int(input(f'Найдено {num_of_dir} файла, выберете нужный: '))
+            choice1 = int(input(f'Файлов найдено: {num_of_dir}\nВыберете нужный: '))
             if 1 <= choice1 <= num_of_dir:
                 selected_file_path = results[choice1 - 1]
                 print(f"Вы выбрали: {selected_file_path}")
                 with open(selected_file_path, 'r') as file:
                     if file.readable() and file.read() == '':
                         print("Файл пустой")
-                        global_selected_file = selected_file_path
-                        return global_selected_file
-                    global_selected_file = selected_file_path
-                    return global_selected_file
+                        GLOBAL_SELECTED_FILE = selected_file_path
+                        return GLOBAL_SELECTED_FILE
+                    GLOBAL_SELECTED_FILE = selected_file_path
+                    return GLOBAL_SELECTED_FILE
             else:
                 print("Неверный номер. Пожалуйста, выберите номер из списка.")
         except ValueError:
@@ -96,15 +97,15 @@ def select_file():
         with open(selected_file_path, 'r') as file:
             if file.readable() and file.read() == '':
                 print("Файл пустой")
-                global_selected_file = selected_file_path
-                return global_selected_file
+                GLOBAL_SELECTED_FILE = selected_file_path
+                return GLOBAL_SELECTED_FILE
             else:
-                global_selected_file = selected_file_path
-                return global_selected_file
+                GLOBAL_SELECTED_FILE = selected_file_path
+                return GLOBAL_SELECTED_FILE
 
 
 def contact_id():
-    data = open_file(global_selected_file)
+    data = open_file(GLOBAL_SELECTED_FILE)
     next_id = 1
     if not data:
         return next_id
@@ -127,7 +128,7 @@ def save_file(contact_data, file):
 
 
 def add_contact():
-    data = open_file(global_selected_file)
+    data = open_file(GLOBAL_SELECTED_FILE)
     input_name = str(input('Введите имя: '))
     if input_name == 'отмена':
         return run()
@@ -140,13 +141,13 @@ def add_contact():
                               'phone': input_phone,
                               'city': input_city.title()
                               }
-        save_file(data, global_selected_file)
+        save_file(data, GLOBAL_SELECTED_FILE)
         print('Контакт добавлен')
 
 
 def count_decorations():
     max_length_deco = 1
-    phone_db = open_file(global_selected_file)
+    phone_db = open_file(GLOBAL_SELECTED_FILE)
     length_deco = []
     for key, value in phone_db.items():
         relative_len = len(f'{key}. {value["name"]} {value["surname"]} {value["phone"]} {value["city"]} ')
@@ -156,10 +157,10 @@ def count_decorations():
 
 
 def show_contacts():
-    if not open_file(global_selected_file):
+    if not open_file(GLOBAL_SELECTED_FILE):
         print('Список контактов пуст')
     else:
-        phone_db = open_file(global_selected_file)
+        phone_db = open_file(GLOBAL_SELECTED_FILE)
         print('=' * count_decorations())
         print('   id  name            surname         phone           city')
         print('=' * count_decorations())
@@ -169,9 +170,9 @@ def show_contacts():
 
 
 def search_contact():
-    global global_result_search
+    global GLOBAL_RESULT_SEARCH
     show_contacts()
-    data = open_file(global_selected_file)
+    data = open_file(GLOBAL_SELECTED_FILE)
     user_search = input('Введите запрос: ')
     if not user_search.strip():
         print('Некорректный запрос')
@@ -182,7 +183,7 @@ def search_contact():
         print('=' * count_decorations())
         for key, value in data.items():
             if user_search_num in value.values() or user_search in value.values():
-                global_result_search = value
+                GLOBAL_RESULT_SEARCH = value
                 print(f'{key: >5}. {value["name"]: <15} {value["surname"]: <15} {value["phone"]: <15} {value["city"]: <15} ')
         print('=' * count_decorations())
     else:
@@ -194,10 +195,10 @@ def search_contact():
         print('=' * count_decorations())
         for key, value in data.items():
             if search_lower in value.values() or search_upper in value.values() or search_title in value.values():
-                global_result_search = value
+                GLOBAL_RESULT_SEARCH = value
                 print(f'{key: >5}. {value["name"]: <15} {value["surname"]: <15} {value["phone"]: <15} {value["city"]: <15} ')
         print('=' * count_decorations())
-    if not global_result_search:
+    if not GLOBAL_RESULT_SEARCH:
         print('Ничего не найдено')
 
 
@@ -205,13 +206,13 @@ def change_contact():
     list_key = []
     show_contacts()
     choice = input('Выберете id контакта который желаете изменить: ')
-    data = open_file(global_selected_file)
+    data = open_file(GLOBAL_SELECTED_FILE)
     list_id = []
     for key in data.keys():
         list_id.append(key)
     if choice in list_id:
         print('У выбранного контакта имеются следующие атрибуты: ')
-        data = open_file(global_selected_file)
+        data = open_file(GLOBAL_SELECTED_FILE)
         for key in data[choice].keys():
             list_key.append(key)
         print(list_key)
@@ -220,7 +221,7 @@ def change_contact():
             if choice_attribute in data[choice].keys():
                 new_name = input('Введи новое значение атрибута: ')
                 data[choice][choice_attribute] = new_name
-            save_file(data, global_selected_file)
+            save_file(data, GLOBAL_SELECTED_FILE)
             show_contacts()
         else:
             print('Введено неверное значение атрибута')
@@ -233,14 +234,14 @@ def change_contact():
 def delete_contact():
     show_contacts()
     choice = input('Выберете id контакта который желаете удалить: ')
-    data = open_file(global_selected_file)
+    data = open_file(GLOBAL_SELECTED_FILE)
     list_id = []
     for key in data.keys():
         list_id.append(key)
     if choice in list_id:
-        data = open_file(global_selected_file)
+        data = open_file(GLOBAL_SELECTED_FILE)
         del data[choice]
-        save_file(data, global_selected_file)
+        save_file(data, GLOBAL_SELECTED_FILE)
         print(f'Контакт с id {choice} удалён')
         show_contacts()
     else:
@@ -279,7 +280,7 @@ def delete_file():
 
 def run():
     while True:
-        for str_menu_1 in menu_1:
+        for str_menu_1 in MENU_1:
             print(str_menu_1)
         choice = chk_main_menu_selection()
         if choice == '1':
@@ -291,13 +292,13 @@ def run():
             except FileExistsError:
                 print('Файл с таким именем существует')
         elif choice == '3':
-            if not global_selected_file:
+            if not GLOBAL_SELECTED_FILE:
                 print('Файл не выбран')
             else:
                 show_contacts()
         elif choice == '4':
             try:
-                if not global_selected_file:
+                if not GLOBAL_SELECTED_FILE:
                     print('Файл не выбран')
                 else:
                     print('Для отмены введите ключевое слово "отмена"')
@@ -305,17 +306,17 @@ def run():
             except ValueError:
                 print('Телефонный номер не может содержать буквы')
         elif choice == '5':
-            if not global_selected_file:
+            if not GLOBAL_SELECTED_FILE:
                 print('Файл не выбран')
             else:
                 search_contact()
         elif choice == '6':
-            if not global_selected_file:
+            if not GLOBAL_SELECTED_FILE:
                 print('Файл не выбран')
             else:
                 change_contact()
         elif choice == '7':
-            if not global_selected_file:
+            if not GLOBAL_SELECTED_FILE:
                 print('Файл не выбран')
             else:
                 delete_contact()
