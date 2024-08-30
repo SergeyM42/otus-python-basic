@@ -132,9 +132,11 @@ def add_contact():
     if input_name == 'отмена':
         return run()
     else:
+        input_surname = str(input('Введите фамилию: '))
         input_phone = int(input('Введите телефон: '))
         input_city = str(input('Введите город: '))
         data[contact_id()] = {'name': input_name.title(),
+                              'surname': input_surname.title(),
                               'phone': input_phone,
                               'city': input_city.title()
                               }
@@ -147,7 +149,7 @@ def count_decorations():
     phone_db = open_file(global_selected_file)
     length_deco = []
     for key, value in phone_db.items():
-        relative_len = len(f'{key}. {value["name"]} {value["phone"]} {value["city"]} ')
+        relative_len = len(f'{key}. {value["name"]} {value["surname"]} {value["phone"]} {value["city"]} ')
         length_deco.append(relative_len)
         max_length_deco = max(length_deco) + 45
     return max_length_deco
@@ -159,10 +161,10 @@ def show_contacts():
     else:
         phone_db = open_file(global_selected_file)
         print('=' * count_decorations())
-        print('   id  name                           phone           city')
+        print('   id  name            surname         phone           city')
         print('=' * count_decorations())
         for key, value in phone_db.items():
-            print(f'{key: >5}. {value["name"]: <30} {value["phone"]: <15} {value["city"]: <15} ')
+            print(f'{key: >5}. {value["name"]: <15} {value["surname"]: <15} {value["phone"]: <15} {value["city"]: <15} ')
         print('=' * count_decorations())
 
 
@@ -176,35 +178,27 @@ def search_contact():
     elif user_search.strip().isdigit():
         user_search_num = int(user_search)
         print('=' * count_decorations())
-        print('   id  name                           phone           city')
+        print('   id  name            surname         phone           city')
         print('=' * count_decorations())
         for key, value in data.items():
             if user_search_num in value.values() or user_search in value.values():
                 global_result_search = value
-                print(f'{key: >5}. {value["name"]: <30} {value["phone"]: <15} {value["city"]: <15} ')
+                print(f'{key: >5}. {value["name"]: <15} {value["surname"]: <15} {value["phone"]: <15} {value["city"]: <15} ')
         print('=' * count_decorations())
     else:
         search_lower = user_search.lower().strip()
         search_upper = user_search.upper().strip()
         search_title = user_search.title().strip()
         print('=' * count_decorations())
-        print('   id  name                           phone           city')
+        print('   id  name            surname         phone           city')
         print('=' * count_decorations())
         for key, value in data.items():
             if search_lower in value.values() or search_upper in value.values() or search_title in value.values():
                 global_result_search = value
-                print(f'{key: >5}. {value["name"]: <30} {value["phone"]: <15} {value["city"]: <15} ')
+                print(f'{key: >5}. {value["name"]: <15} {value["surname"]: <15} {value["phone"]: <15} {value["city"]: <15} ')
         print('=' * count_decorations())
     if not global_result_search:
         print('Ничего не найдено')
-
-
-def chk_main_menu_selection1111():
-    while True:
-        choice = input('Выберите действие: ')
-        if choice.isdigit() and 0 < int(choice) < 10:
-            return choice
-        print('Введена неверная опция')
 
 
 def change_contact():
