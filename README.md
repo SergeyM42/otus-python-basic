@@ -1,6 +1,47 @@
 # Домашняя работ номер 1
 
-Телефонный справочник написанный с использованием функций.
+## Установка и запуск
+
+Для запуска нужен python версии не ниже 3.9
+
+### Mac os
+brew install python3  
+mkdir otus 
+git clone git@github.com:SergeyM42/otus-python-basic.git  
+или    
+git clone https://github.com/SergeyM42/otus-python-basic.git
+cd otus-python-basic  
+python3 main.py 
+
+### Windows
+Скачать https://www.python.org/ftp/python/3.12.5/python-3.12.5-amd64.exe  
+установить двойным кликом python-3.12.5-amd64.exe  
+создать папку otus, скачать проект через браузер  
+перейти в папку проекта otus-python-basic  
+python3 main.py  
+
+### Debian/Ubuntu
+apt-get update  
+apt-get install python3  
+mkdir otus  
+git clone git@github.com:SergeyM42/otus-python-basic.git  
+или    
+git clone https://github.com/SergeyM42/otus-python-basic.git  
+cd otus-python-basic  
+python3 main.py
+
+### Rhel
+yum update  
+yum install python3  
+mkdir otus  
+git clone git@github.com:SergeyM42/otus-python-basic.git  
+или    
+git clone https://github.com/SergeyM42/otus-python-basic.git  
+cd otus-python-basic  
+python3 main.py
+
+
+## Основные функции
 
     1. Открыть файл/показать список файлов
     2. Создать файл телефонной книги
