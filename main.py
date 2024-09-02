@@ -20,6 +20,10 @@ MENU_1 = [
 
 
 def chk_main_menu_selection():
+    """
+    Функция реализует проверку ввода выбора пунктов в главном меню.
+    :return: Число от 1 до 9
+    """
     while True:
         choice = input('Выберите действие: ')
         if choice.isdigit() and 0 < int(choice) < 10:
@@ -28,6 +32,10 @@ def chk_main_menu_selection():
 
 
 def search_files_phone_books():
+    """
+    Функция реализует поиск файлов с расширением json в корневой директории проекта
+    :return: Список файлов
+    """
     results = []
     for root, dirs, files in os.walk('.'):
         for file in files:
@@ -38,6 +46,11 @@ def search_files_phone_books():
 
 
 def create_file(file_path):
+    """
+    Функция создаёт файл с расширением json
+    :param file_path: Пусть до файла
+    :return: Файл *.fson
+    """
     if file_path == 'отмена':
         return run()
     if file_path.endswith('.json'):
@@ -50,6 +63,10 @@ def create_file(file_path):
 
 
 def chk_open_file_menu_selection():
+    """
+    Функция проверки ввода в суб меню при создании новой телефонной книги
+    :return: int(choice) от 1 до 2
+    """
     while True:
         choice = input('Создать новую книгу? 1 - Да / 2 - Нет: ')
         if choice.isdigit() and 0 < int(choice) < 3:
@@ -58,6 +75,11 @@ def chk_open_file_menu_selection():
 
 
 def select_file():
+    """
+    Функция реализует выбор файла телефонной книги и
+    если файл отсутствует в корневой директории программы, предлагает его создать
+    :return:
+    """
     global GLOBAL_SELECTED_FILE
     results = search_files_phone_books()
     if not results:
@@ -105,6 +127,11 @@ def select_file():
 
 
 def contact_id():
+    """
+    Функция создаёт id контакта, если файл телефонной книги пуст то id = 1, иначе находится
+    максимальный доступный ключ контакта и к нему прибавляется единица
+    :return: int(next_id)
+    """
     data = open_file(GLOBAL_SELECTED_FILE)
     next_id = 1
     if not data:
@@ -115,6 +142,12 @@ def contact_id():
 
 
 def open_file(file):
+    """
+    Функция открывает выбранный json файл на чтение, возвращает файл телефонной книги,
+    если словарь не был распознан как json файл то возвращает пустой словарь
+    :param file: путь до файла
+    :return: dict()
+    """
     try:
         with open(file, 'r', encoding='UTF-8') as json_file:
             return json.load(json_file)
@@ -123,11 +156,21 @@ def open_file(file):
 
 
 def save_file(contact_data, file):
+    """
+    Функция сохраняет выбранный файл
+    :param contact_data: данные контакта для записи в файл
+    :param file: путь до файла
+    :return:
+    """
     with open(file, 'w', encoding='UTF-8') as json_file:
         json.dump(contact_data, json_file)
 
 
 def add_contact():
+    """
+    Функция добавляет новый контакт в файл телефонной книги
+    :return:
+    """
     data = open_file(GLOBAL_SELECTED_FILE)
     input_name = str(input('Введите имя: '))
     if input_name == 'отмена':
@@ -146,6 +189,11 @@ def add_contact():
 
 
 def count_decorations():
+    """
+    Функция выводи декоративные разделите для разграничения вывода контактов телефонной книги,
+    количество зависит от максимальной длинны строки контакта, плюс статическая поправка на отступы
+    :return:
+    """
     max_length_deco = 1
     phone_db = open_file(GLOBAL_SELECTED_FILE)
     length_deco = []
@@ -157,6 +205,10 @@ def count_decorations():
 
 
 def show_contacts():
+    """
+    Функция отображает список контактов в телефонной книге
+    :return:
+    """
     if not open_file(GLOBAL_SELECTED_FILE):
         print('Список контактов пуст')
     else:
@@ -170,6 +222,10 @@ def show_contacts():
 
 
 def search_contact():
+    """
+    Функция поиска контактов в телефонной книге, ведёт поиск по полному совпадению любого значения без учёта регистра
+    :return:
+    """
     global GLOBAL_RESULT_SEARCH
     show_contacts()
     data = open_file(GLOBAL_SELECTED_FILE)
@@ -203,6 +259,10 @@ def search_contact():
 
 
 def change_contact():
+    """
+    Функция реализует изменение выбранного контакта
+    :return:
+    """
     list_key = []
     show_contacts()
     choice = input('Выберете id контакта который желаете изменить: ')
@@ -232,6 +292,10 @@ def change_contact():
 
 
 def delete_contact():
+    """
+    Функция реализует удаление выбранного контакта по id контакта
+    :return:
+    """
     show_contacts()
     choice = input('Выберете id контакта который желаете удалить: ')
     data = open_file(GLOBAL_SELECTED_FILE)
@@ -249,6 +313,10 @@ def delete_contact():
 
 
 def delete_file():
+    """
+    Функция реализует удаление выбранного файла телефонной книги по имени файла
+    :return:
+    """
     results = []
     for root, dirs, files in os.walk('.'):
         for file in files:
@@ -279,6 +347,10 @@ def delete_file():
 
 
 def run():
+    """
+    Функция главного меню программы, отображает основное меню и реализует функционал выбора действий
+    :return:
+    """
     while True:
         for str_menu_1 in MENU_1:
             print(str_menu_1)
